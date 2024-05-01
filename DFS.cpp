@@ -1,51 +1,56 @@
-#include <iostream>
-#include <list>
+#include <bits/stdc++.h>
+
 using namespace std;
+ 
 
 class Graph {
-  int numVertices;
-  list<int> *adjLists;
-  bool *visited;
 
-   public:
-  Graph(int V);
-  void addEdge(int src, int dest);
-  void DFS(int vertex);
+public:
+
+    map<int, bool> visited;
+
+    map<int, list<int> > adj;
+    void addEdge(int v, int w);
+
+    void DFS(int v);
 };
+void Graph::addEdge(int v, int w)
+{
 
-
-Graph::Graph(int vertices) {
-  numVertices = vertices;
-  adjLists = new list<int>[vertices];
-  visited = new bool[vertices];
+    adj[v].push_back(w);
 }
+void Graph::DFS(int v)
+{
+    visited[v] = true;
+    cout << v << " ";
+    list<int>::iterator i;
 
+    for (i = adj[v].begin(); i != adj[v].end(); ++i)
 
-void Graph::addEdge(int src, int dest) {
-  adjLists[src].push_front(dest);
+        if (!visited[*i])
+
+            DFS(*i);
 }
+int main()
+{
+ Graph g;
 
+    g.addEdge(0, 1);
 
-void Graph::DFS(int vertex) {
-  visited[vertex] = true;
-  list<int> adjList = adjLists[vertex];
+    g.addEdge(0, 2);
 
-  cout << vertex << " ";
+    g.addEdge(1, 2);
 
-  list<int>::iterator i;
-  for (i = adjList.begin(); i != adjList.end(); ++i)
-    if (!visited[*i])
-      DFS(*i);
-}
+    g.addEdge(2, 0);
 
-int main() {
-  Graph g(4);
-  g.addEdge(0, 1);
-  g.addEdge(0, 2);
-  g.addEdge(1, 2);
-  g.addEdge(2, 3);
+    g.addEdge(2, 3);
 
-  g.DFS(2);
+    g.addEdge(3, 3);
+ 
 
-  return 0;
+    cout << "Following is Depth First Traversal"
+
+            " (starting from vertex 2) \n";
+    g.DFS(2);
+    return 0;
 }
